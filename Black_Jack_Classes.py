@@ -5,19 +5,16 @@ ranks = ('Two', 'Three', 'Four', 'Five', 'Six', 'Seven', 'Eight', 'Nine', 'Ten',
 values = {'Two':2, 'Three':3, 'Four':4, 'Five':5, 'Six':6, 'Seven':7, 'Eight':8, 'Nine':9, 'Ten':10, 'Jack':10,
          'Queen':10, 'King':10, 'Ace':11}
 
-playing = True
-
 class Game():
 
-    def __init__(self):
-        pass
+    def __init__(self, playing = True):
+        self.playing = playing
 
     def get_playing(self):
-        return playing
+        return self.playing
 
     def set_playing(self, state):
-        global playing
-        playing = state
+        self.playing = state
 
 class Card():
     
@@ -52,29 +49,28 @@ class Deck():
 
 class Hand():
 
-    def __init__(self, dealer = False):
+    def __init__(self):
         self.deck = []
         self.num_aces = 0
         self.value = 0
-        self.dealer = dealer
 
     def adjust_aces(self):
-        choice = input("You've received an Ace. Would you like to adjust its value? y/n > ").lower()
-        if choice == 'y':
-            print("Ace's value has been changed!")
-            self.num_aces -= 1
-            self.value -= 10
-        elif choice == 'n':
-            print("Ace stays the same!")
-        else:
-            print("Wrong input format, but whatever. Ace stays the same!")
+        if self.deck[-1].rank == 'Ace':
+            choice = input("Would you like to change the Ace's value? y/n > ").lower()
+            if choice == 'y':
+                print("Ace's value has been changed!")
+                self.num_aces -= 1
+                self.value -= 10
+            elif choice == 'n':
+                print("Ace stays the same!")
+            else:
+                print("Wrong input format, but whatever. Ace stays the same!")
 
     def add_card(self, card):
         self.deck.append(card)
         self.value += values[card.rank]
-        if card.rank == "Ace" and not self.dealer:
+        if card.rank == "Ace":
             self.num_aces += 1
-            self.adjust_aces()
 
     def __str__(self):
         hand_str = ''

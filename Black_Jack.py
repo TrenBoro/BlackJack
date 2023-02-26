@@ -1,5 +1,5 @@
 from os import sep
-from Black_Jack_Classes import Card, Deck, Hand, Chips, Game
+from Black_Jack_Classes import Deck, Hand, Chips, Game
 
 def take_bet(chips):
     while True:
@@ -21,6 +21,7 @@ def hit_or_stand(deck, hand, gamestate):
         choice = input("\nHIT or to STAND? > ").lower()
         if choice == "hit":
             hit(deck, hand)
+            gamestate.set_playing(True)
         elif choice == 'stand':
             gamestate.set_playing(False)
             print("\nThe dealer is playing")
@@ -71,15 +72,18 @@ def main():
         print("\tWELCOME TO BLACKJACK!!!\n\n")
 
         game = Game()
+        #game.get_playing()
 
         deck = Deck()
         deck.shuffle()
 
         player_hand = Hand()
         player_hand.add_card(deck.deal_one())
+        player_hand.adjust_aces()
         player_hand.add_card(deck.deal_one())
+        player_hand.adjust_aces()
 
-        dealer_hand = Hand(True)
+        dealer_hand = Hand()
         dealer_hand.add_card(deck.deal_one())
         dealer_hand.add_card(deck.deal_one())
 
@@ -93,6 +97,7 @@ def main():
 
         while game.get_playing():
             hit_or_stand(deck, player_hand, game)
+            player_hand.adjust_aces()
 
             show_some(player_hand, dealer_hand)
 
@@ -100,7 +105,7 @@ def main():
                 player_bust(player_chips)
                 break # break out of playing
 
-        if player_hand.value <= 21:
+        if player_hand.value <= 21 and not game.get_playing():
             while dealer_hand.value < 17:
                 hit(deck, dealer_hand)
 
@@ -119,18 +124,16 @@ def main():
 
         again = input("\tWould you like to play again? y/n > ").lower()
 
-        if player_chips.total < 0:
+        if player_chips.total <= 0:
             print("\nYou don't have any chips left...")
-            break
-        exit()
+            exit()
 
-        else:
-            if again == 'y':
-                continue
+        elif again == 'y':
+            continue
     
-            else:
-                print("That's not a no, but whatever. Bye!")
-                break
+        else:
+            print("That's not a no, but whatever. Bye!")
+            break
 
 if __name__ == '__main__':
     main()
