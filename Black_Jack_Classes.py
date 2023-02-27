@@ -56,6 +56,7 @@ class Hand():
 
     def adjust_aces(self):
         if self.deck[-1].rank == 'Ace':
+            print("You've gotten an Ace!")
             choice = input("Would you like to change the Ace's value? y/n > ").lower()
             if choice == 'y':
                 print("Ace's value has been changed!")

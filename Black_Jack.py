@@ -132,7 +132,7 @@ def main():
             continue
     
         else:
-            print("That's not a no, but whatever. Bye!")
+            print("Bye! Thanks for playing!")
             break
 
 if __name__ == '__main__':
